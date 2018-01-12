@@ -70,7 +70,6 @@ def get_course_outline_block_tree(request, course_id):
         requested_fields=['children', 'display_name', 'type', 'due', 'graded', 'special_exam_info', 'show_gated_sections', 'format'],
         block_types_filter=['course', 'chapter', 'sequential', 'vertical']
     )
-    print all_blocks
     course_outline_root_block = all_blocks['blocks'].get(all_blocks['root'], None)
     if course_outline_root_block:
         populate_children(course_outline_root_block, all_blocks['blocks'])
