@@ -121,6 +121,11 @@ from openedx.core.djangolib.markup import HTML, Text
                                                 % endif
                                             </span>
                                             % endif
+                                            % for vertical in subsection.get('children', []):
+                                                <div>
+                                                    <span>${ vertical['display_name'] }</span>
+                                                </div>
+                                            % endfor
                                         </div> <!-- /details -->
                                     </div> <!-- /subsection-text -->
                                     <div class="subsection-actions">
