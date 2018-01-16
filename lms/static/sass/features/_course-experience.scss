@@ -342,14 +342,31 @@
           border-radius: 3px;
           margin-bottom: $baseline/4;
 
-          a.outline-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: ($baseline / 2);
+          .subsection-title {
+            margin: 0;
+            font-weight: $font-bold;
+          }
 
-            .subsection-title {
-              margin: 0;
+          .subsection-text {
+            .details {
+              font-size: $body-font-size;
+              color: theme-color("secondary");
+            }
+          }
+
+          .vertical{
+            @include margin-left(10px);
+
+            list-style-type: none;
+            border : 1px solid transparent;
+            border-radius: 2px;
+            margin-bottom: $baseline/8;
+
+            a.outline-item {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: ($baseline / 2);
             }
 
             &:hover,
@@ -359,20 +376,15 @@
               text-decoration: none;
             }
 
-            .subsection-text {
-              .details {
-                font-size: $body-font-size;
-                color: theme-color("secondary");
-              }
-            }
+          }
 
-            .subsection-actions {
-              .resume-right {
-                position: relative;
-                top: calc(50% - (#{$baseline} / 2));
-              }
+          .subsection-actions {
+            .resume-right {
+              position: relative;
+              top: calc(50% - (#{$baseline} / 2));
             }
           }
+          
 
           &.current {
             border: 1px solid theme-color("primary");
