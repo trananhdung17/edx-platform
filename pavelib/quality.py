@@ -740,19 +740,6 @@ def run_quality(options):
 
         return ''.join(lines)
 
-    # Run pep8 directly since we have 0 violations on master
-    (count, violations_list) = _get_pep8_violations(clean=False)
-
-    # Print number of violations to log
-    print _lint_output('pep8', count, violations_list)
-
-    # Also write the number of violations to a file
-    with open(dquality_dir / "diff_quality_pep8.html", "w") as f:
-        f.write(_lint_output('pep8', count, violations_list, is_html=True))
-
-    if count > 0:
-        diff_quality_percentage_pass = False
-
     # Generate diff-quality html report for pylint, and print to console
     # If pylint reports exist, use those
     # Otherwise, `diff-quality` will call pylint itself
