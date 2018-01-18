@@ -34,6 +34,13 @@ module.exports = {
         LearnerAnalyticsDashboard: './lms/static/js/learner_analytics_dashboard/LearnerAnalyticsDashboard.jsx',
         UpsellExperimentModal: './lms/static/common/js/components/UpsellExperimentModal.jsx',
 
+        // Learner Dashboard
+        EntitlementFactory: './lms/static/js/learner_dashboard/course_entitlement_factory.js',
+        EntitlementUnenrollmentFactory: './lms/static/js/learner_dashboard/entitlement_unenrollment_factory.js',
+        ProgramDetailsFactory: './lms/static/js/learner_dashboard/program_details_factory.js',
+        ProgramListFactory: './lms/static/js/learner_dashboard/program_list_factory.js',
+        UnenrollmentFactory: './lms/static/js/learner_dashboard/unenrollment_factory.js',
+
         // Features
         CourseGoals: './openedx/features/course_experience/static/course_experience/js/CourseGoals.js',
         CourseHome: './openedx/features/course_experience/static/course_experience/js/CourseHome.js',
@@ -176,6 +183,7 @@ module.exports = {
             'node_modules',
             'common/static/js/vendor/',
             'cms/static',
+            'common/static/',
             'common/static/js/src'
         ]
     },
