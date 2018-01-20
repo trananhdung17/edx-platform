@@ -50,8 +50,8 @@ class EdxOAuth2Validator(OAuth2Validator):
 
     def _authenticate(self, username, password):
         """
-        Authenticate the user, allowing the user to identify themself either by
-        username or email
+        Authenticate the user, allowing the user to identify themselves either
+        by username or email
         """
 
         authenticated_user = authenticate(username=username, password=password)
@@ -67,8 +67,11 @@ class EdxOAuth2Validator(OAuth2Validator):
 
     def save_bearer_token(self, token, request, *args, **kwargs):
         """
-        Ensure that access tokens issued via client credentials grant are associated with the owner of the
-        ``Application``.
+        Ensure that access tokens issued via client credentials grant are
+        associated with the owner of the ``Application``.
+
+        Also, update the `expires_in` value in the token response for
+        RestrictedApplications.
         """
         grant_type = request.grant_type
         user = request.user
@@ -94,7 +97,7 @@ class EdxOAuth2Validator(OAuth2Validator):
             utc_now = datetime.utcnow().replace(tzinfo=utc)
             expires_in = (access_token.expires - utc_now).total_seconds()
 
-            # assert that RestriectedApplications only issue expired tokens
+            # assert that RestrictedApplications only issue expired tokens
             # blow up processing if we see otherwise
             assert expires_in < 0
 
