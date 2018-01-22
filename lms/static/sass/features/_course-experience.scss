@@ -376,6 +376,20 @@
               text-decoration: none;
             }
 
+            
+            &.current {
+              border: 1px solid theme-color("primary");
+              border-radius: $btn-border-radius;
+
+              .resume-right {
+                @include float(right);
+              }
+            }
+
+            &:hover {
+              border: 1px solid theme-color("primary");
+            }
+
           }
 
           .subsection-actions {
@@ -383,20 +397,6 @@
               position: relative;
               top: calc(50% - (#{$baseline} / 2));
             }
-          }
-          
-
-          &.current {
-            border: 1px solid theme-color("primary");
-            border-radius: $btn-border-radius;
-
-            .resume-right {
-              @include float(right);
-            }
-          }
-
-          &:hover {
-            border: 1px solid theme-color("primary");
           }
 
           &:last-child {
