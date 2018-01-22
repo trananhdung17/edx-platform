@@ -376,7 +376,13 @@
               text-decoration: none;
             }
 
-            
+            .vertical-actions {
+              .resume-right {
+                position: relative;
+                top: calc(50% - (#{$baseline} / 2));
+              }
+            }
+
             &.current {
               border: 1px solid theme-color("primary");
               border-radius: $btn-border-radius;
@@ -390,13 +396,6 @@
               border: 1px solid theme-color("primary");
             }
 
-          }
-
-          .subsection-actions {
-            .resume-right {
-              position: relative;
-              top: calc(50% - (#{$baseline} / 2));
-            }
           }
 
           &:last-child {
