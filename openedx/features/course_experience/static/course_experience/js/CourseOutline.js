@@ -33,5 +33,24 @@ export class CourseOutline {  // eslint-disable-line import/prefer-default-expor
         );
       }),
     );
+
+    [...document.querySelectorAll('li.outline-item.section')]
+      .forEach(el => el.addEventListener('click', (event)=> {
+        event.stopPropagation();
+        //This is a proof of concept
+        //We should not use jquery to make the toggle behavior
+        //And this is not yet accessible
+        $(event.target).closest('li.outline-item.section').children('ol').toggle("slow");
+      }));
+
+    [...document.querySelectorAll('li.subsection')]
+      .forEach(el => el.addEventListener('click', (event)=> {
+        event.stopPropagation();
+        //This is a proof of concept
+        //We should not use jquery to make the toggle behavior
+        //And this is not yet accessible
+        $(event.target).closest('li.subsection').children('ol').toggle("slow");
+      }));
+
   }
 }
