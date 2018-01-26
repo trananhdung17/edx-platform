@@ -304,7 +304,7 @@
 
     .section {
       margin: 0 (-1 * $baseline);
-      width: calc(100% + (2 * $baseline));
+      width: calc(100% + (2));
       padding: 0 ($baseline);
 
       &:not(:first-child) {
@@ -316,12 +316,15 @@
       .section-name {
         @include margin(0, 0, ($baseline / 2), ($baseline / 2));
 
-        padding: 0;
+        padding: 0 0 $baseline 0;
+        border-bottom: 1px solid $border-color;
 
         .section-title {
           font-weight: $font-bold;
           font-size: 1.1rem;
           margin: 0;
+          display: inline;
+          padding-left: $baseline;
         }
       }
 
