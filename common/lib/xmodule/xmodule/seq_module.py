@@ -446,6 +446,13 @@ class SequenceModule(SequenceFields, ProctoringFields, XModule):
             rendered_item = item.render(STUDENT_VIEW, context)
             fragment.add_fragment_resources(rendered_item)
 
+            complete = True
+            for child in item.get_children():
+                # if not child.complete:
+                if False:
+                    complete = False
+                    break
+
             iteminfo = {
                 'content': rendered_item.content,
                 'page_title': getattr(item, 'tooltip_title', ''),
@@ -453,6 +460,7 @@ class SequenceModule(SequenceFields, ProctoringFields, XModule):
                 'id': text_type(usage_id),
                 'bookmarked': is_bookmarked,
                 'path': " > ".join(display_names + [item.display_name_with_default]),
+                'complete': complete,
             }
 
             contents.append(iteminfo)
