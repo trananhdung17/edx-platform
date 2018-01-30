@@ -14,22 +14,31 @@ from openedx.core.djangolib.markup import HTML, Text
 
 <main role="main" class="course-outline" id="main" tabindex="-1">
     % if blocks.get('children'):
-        <ol class="block-tree">
+        <ol class="block-tree accordion" role="presentation">
             % for section in blocks.get('children'):
                 <li
-                    class="outline-item focusable section"
-                    id="${ section['id'] }"
+                    class="outline-item section"
+                    role="heading"
                 >
-                    <div class="section-name">
+                    <button class="section-name accordion-trigger"
+                            aria-expanded="false"
+                            aria-controls="${ section['id'] }_contents"
+                            id="${ section['id'] }">
                         <span class="fa fa-chevron-right" aria-hidden="true"></span>
                         <h3 class="section-title">${ section['display_name'] }</h3>
-                    </div>
-                    <ol class="outline-item">
+                    </button>
+                    <ol class="outline-item accordion-panel is-hidden"
+                        id="${ section['id'] }_contents"
+                        role="region"
+                        aria-labelledby="${ section['id'] }"
+                    >
                         % for subsection in section.get('children', []):
-                            <li
-                                class="subsection"
-                            >
-                                <div class="subsection-text">
+                            <li class="subsection accordion" role="heading">
+                                <button class="subsection-text accordion-trigger"
+                                     id="${ subsection['id'] }"
+                                     aria-expanded="false"
+                                     aria-controls="${ subsection['id'] }_contents"
+                                >
                                     ## Subsection title
                                     <span class="subsection-title">
                                         % if subsection['id'] in gated_content:
@@ -48,11 +57,12 @@ from openedx.core.djangolib.markup import HTML, Text
                                                 <span class="subsection-title-name">
                                                     ${ subsection['display_name'] }
                                                 </span>
-                                                <span class="details">
-                                                    ${ _("(Prerequisite required)") }
-                                                </span>
+                                                <div class="details">
+                                                    ${ _("Prerequisite: ") }
+                                                </div>
                                             % endif
                                         % else:
+                                            <span class="fa fa-chevron-right" aria-hidden="true"></span>
                                             <span class="subsection-title-name">
                                                 ${ subsection['display_name'] }
                                             </span>
@@ -109,18 +119,22 @@ from openedx.core.djangolib.markup import HTML, Text
                                                 ></span>
 
                                                 % if 'graded' in subsection and subsection['graded']:
-                                                    <span
-                                                        class="menu-icon icon fa fa-pencil-square-o"
-                                                        aria-hidden="true"
-                                                    ></span>
+                                                    <!--<span-->
+                                                        <!--class="menu-icon icon fa fa-pencil-square-o"-->
+                                                        <!--aria-hidden="true"-->
+                                                    <!--&gt;</span>-->
                                                     <span class="sr">&nbsp;${_("This content is graded")}</span>
                                                 % endif
                                             % endif
                                         </span>
                                         % endif
-                                    </div> <!-- /details -->
-                                </div> <!-- /subsection-text -->
-                                <ol class="outline-item">
+                                  </div> <!-- /details -->
+                                </button> <!-- /subsection-text -->
+                                <ol class="outline-item accordion-panel is-hidden"
+                                         id="${ subsection['id'] }_contents"
+                                         role="region"
+                                         aria-labelledby="${ subsection['id'] }"
+                                >
                                 % for vertical in subsection.get('children', []):
                                     <li class="vertical outline-item focusable ${ 'current' if vertical['last_accessed'] else '' }">
                                          <a

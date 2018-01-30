@@ -303,21 +303,13 @@
     list-style-type: none;
 
     .section {
-      margin: 0 (-1 * $baseline);
+      margin: 0 (-1 * $baseline) 0 ($baseline);
       width: calc(100% + (2));
-      padding: 0 ($baseline);
-
-      &:not(:first-child) {
-        .section-name {
-          margin-top: $baseline;
-        }
-      }
+      padding: 0;
+      border-bottom: 1px solid $border-color;
 
       .section-name {
-        @include margin(0, 0, ($baseline / 2), ($baseline / 2));
-
-        padding: 0 0 $baseline 0;
-        border-bottom: 1px solid $border-color;
+        padding: ($baseline / 2) 0 ($baseline / 2) 0;
 
         .section-title {
           font-weight: $font-bold;
@@ -333,21 +325,20 @@
       }
 
       ol.outline-item {
-        padding-bottom: $baseline;
-        border-bottom: 1px solid $border-color;
-        margin: 0 0 ($baseline / 2) 0;
+        margin: 0;
 
         .subsection {
-          @include margin-left(10px);
-
           list-style-type: none;
-          border: 1px solid transparent;
-          border-radius: 3px;
-          margin-bottom: $baseline/4;
+          border-top: 1px solid $border-color;
+          margin: 0 0 ($baseline / 4) ($baseline * 2);
 
           .subsection-title {
             margin: 0;
             font-weight: $font-bold;
+
+            .subsection-title-name {
+              margin-left: $baseline;
+            }
           }
 
           .subsection-text {
@@ -363,13 +354,14 @@
             list-style-type: none;
             border : 1px solid transparent;
             border-radius: 2px;
-            margin-bottom: $baseline/8;
 
             a.outline-item {
               display: flex;
               justify-content: space-between;
               align-items: center;
-              padding: ($baseline / 2);
+              padding: ($baseline / 2) 0 ($baseline / 2) 0;
+              margin: 0 0 0 ($baseline / 2);
+              border-top: 1px solid $border-color;
             }
 
             &:hover,
@@ -412,6 +404,19 @@
       }
     }
   }
+}
+
+// Course outline accordion
+button.accordion-trigger {
+  margin: 0;
+  padding: 10px 0 10px 0;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.accordion-panel.is-hidden {
+  display: none;
 }
 
 // date summary

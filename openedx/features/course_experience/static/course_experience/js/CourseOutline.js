@@ -34,23 +34,35 @@ export class CourseOutline {  // eslint-disable-line import/prefer-default-expor
       }),
     );
 
-    [...document.querySelectorAll('li.outline-item.section')]
-      .forEach(el => el.addEventListener('click', (event)=> {
-        event.stopPropagation();
-        //This is a proof of concept
-        //We should not use jquery to make the toggle behavior
-        //And this is not yet accessible
-        $(event.target).closest('li.outline-item.section').children('ol').toggle("slow");
-      }));
+    [...document.querySelectorAll(('.accordion'))]
+        .forEach(function(accordion) {
+            var sections = Array.prototype.slice.call(accordion.querySelectorAll('.accordion-trigger'));
 
-    [...document.querySelectorAll('li.subsection')]
-      .forEach(el => el.addEventListener('click', (event)=> {
-        event.stopPropagation();
-        //This is a proof of concept
-        //We should not use jquery to make the toggle behavior
-        //And this is not yet accessible
-        $(event.target).closest('li.subsection').children('ol').toggle("slow");
-      }));
+            sections.forEach(function(section) {
+                section.addEventListener('click', function (event) {
+                    var sectionToggleButton = event.currentTarget;
+                    var toggleButtonChevron = $(sectionToggleButton).children('.fa-chevron-right');
 
+                    if (sectionToggleButton.classList.contains('accordion-trigger')) {
+                        var isExpanded = sectionToggleButton.getAttribute('aria-expanded') == 'true';
+                        var contentPanel = $(document.getElementById(sectionToggleButton.getAttribute('aria-controls')));
+
+                        if (!isExpanded) {
+                            contentPanel.slideDown();
+                            contentPanel.removeClass('is-hidden');
+                            toggleButtonChevron.addClass('fa-rotate-90');
+                            sectionToggleButton.setAttribute('aria-expanded', 'true');
+                        } else if (isExpanded) {
+                            contentPanel.slideUp();
+                            contentPanel.addClass('is-hidden');
+                            toggleButtonChevron.removeClass('fa-rotate-90');
+                            sectionToggleButton.setAttribute('aria-expanded', 'false');
+                        }
+
+                        event.stopImmediatePropagation();
+                    }
+                });
+            });
+        });
   }
 }
