@@ -12,7 +12,7 @@ Context
 External edX clients would like to use edX as an Identity Provider and verify
 the edX identity of a user. The OAuth2 protocol's Authorization Code grant type
 already supports this behavior and our OAuth2 clients can use it for this
-purpose.However, we want to issue *scoped* access tokens to external edX 
+purpose. However, we want to issue *scoped* access tokens to external edX 
 clients so end users can limit what API calls the clients make on their behalf.
 
 The OAuth2 standard for controlling the use of access tokens is `Access Token
@@ -65,6 +65,5 @@ Pluses
 Minuses
 ~~~~~~~
 
-* Returning expired tokens serves short term needs for SSO, introducing
-  additional technical debt to the already existing debt of the lack of 
-  support for scopes.
+* Returning expired tokens adds additional technical debt on top of the
+  debt incurred by not implementing scopes.

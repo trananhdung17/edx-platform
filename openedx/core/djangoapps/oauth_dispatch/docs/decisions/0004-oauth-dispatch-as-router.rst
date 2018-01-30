@@ -39,9 +39,15 @@ router but will retain its proxy functionality to DOT.
 Consequences
 ------------
 
+Pluses
+~~~~~~
+
 * The OAuth Dispatch app will provide an intermediary interface to the underlying
   implementation(s), which shields the rest of the platform from changes in the
   underlying libraries.
+
+Minuses
+~~~~~~~
 
 * The LMS' security would be impacted if there are security vulnerabilities found
   in either DOP or DOT. Since DOP is no longer supported, security issues may not

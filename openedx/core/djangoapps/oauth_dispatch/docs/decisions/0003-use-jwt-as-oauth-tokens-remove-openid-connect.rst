@@ -28,7 +28,7 @@ access_token request with a DOP client::
 includes an id_token field::
 
     {
-        "access_token": "xyz",
+        "access_token": <RANDOMLY-GENERATED-ACCESS-TOKEN>,
         "id_token": <BASE64-ENCODED-ID-TOKEN>,
         "expires_in": 31535999,
         "token_type": "Bearer",
@@ -87,7 +87,7 @@ JWT Tokens
 
 An OAuth2 client requesting a JWT token_type::
 
-    curl -X POST -d "client_id=abc&client_secret=def&grant_type=client_credentials&token_type=jwt" hhttp://localhost:18000/oauth2/access_token/
+    curl -X POST -d "client_id=abc&client_secret=def&grant_type=client_credentials&token_type=jwt" http://localhost:18000/oauth2/access_token/
 
 would now receive::
 
@@ -103,7 +103,7 @@ decodes to. There would no longer be a separate id_token field, but the
 access_token will now contain the data that would have been in the id_token.
 
 **Note:** In order to use the JWT token type to access an API, the Authorization
-header needs to specify JWT instead of Bearer:: 
+header needs to specify "JWT" instead of "Bearer"::
 
     curl -H "Authorization: JWT <BASE64-ENCODED-JWT>" http://localhost:18000/api/user/v1/me
 
@@ -125,7 +125,7 @@ which returns::
     }
 
 **Note:** In order to use the Bearer token type to access an API, the Authorization
-header specifies Bearer:: 
+header needs to specify "Bearer"::
 
     curl -H "Authorization: Bearer <RANDOMLY-GENERATED-ACCESS-TOKEN>" http://localhost:18000/api/user/v1/me
 
