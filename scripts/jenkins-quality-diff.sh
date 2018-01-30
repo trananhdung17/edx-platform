@@ -2,12 +2,8 @@
 set -e
 
 # This script is used by the edx-platform-quality-check jenkins job.
-
-export LOWER_PYLINT_THRESHOLD=1000
-export UPPER_PYLINT_THRESHOLD=6000
-
 source scripts/jenkins-common.sh
-
+source scripts/thresholds.sh
 
 # Run quality task. Pass in the 'fail-under' percentage to diff-quality
 echo "Running diff quality."
