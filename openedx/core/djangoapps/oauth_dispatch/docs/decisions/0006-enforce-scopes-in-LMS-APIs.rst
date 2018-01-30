@@ -37,7 +37,7 @@ Add support for enforcing OAuth2 scopes by making the following advancements sim
 
   * keep the data payload small
   * keep the UX of the user approval form reasonable
-  * follow principle of least priviledge
+  * follow principle of least privilege
 
 2. Restricted Applications receive *unexpired* JWTs, signed with a *new key*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -170,12 +170,11 @@ in your PR. See further explanations in the Consequences section below.)
   application is not a Restricted Application or if the token_type
   was not a JWT token.
 
-  * **Question:** This will be an issue when microservices want to verify
+  * **Note:** This will be an issue when microservices want to verify
     scopes. Determining whether an access token is associated with a 
-    Restricted Application is an LMS-specific capability. Given this, how 
-    can we roll this out eventually to microservices? Do we need to
-    include a field in the token that indicates whether it was issued
-    to a Restricted Application?
+    Restricted Application is an LMS-specific capability. Given this,
+    we may need to include a field in the token that indicates whether
+    it was issued to a Restricted Application.
 
 * If the scopes verify, the permission class will update the request
   object with any organization values found in the token in an attribute
@@ -187,14 +186,38 @@ in your PR. See further explanations in the Consequences section below.)
   protecting any API endpoints, add the new Permission class to the
   `REST_FRAMEWORK's DEFAULT_PERMISSION_CLASSES`_ setting.
 
+  * **Note:** Many of our API endpoints currently override this default
+    by setting the *permission_classes* field on their own View or ViewSet.
+    So in addition to setting this default value, we will update all
+    (15 or so) places that include JwtAuthentication_ in their
+    *authentication_classes* field.  (**Note to MS:** Please be aware
+    of this. If possible, I will see if we can consolidate the occurrences
+    of JwtAuthentication_ in the edx-platform codebase soon.)
+
 * In case of an unexpected failure with this approach in production,
   use a `feature toggle (switch)`_ named "oauth2.enforce_token_scopes".
   When the switch is disabled, the new Permission class fails verification
   of all Restricted Application requests.
+
+* **Note:** We currently have both `function-based Django views`_ and
+  class-based `Django Rest Framework (DRF)`_ views in the platform.
+
+  * Authorization enforcement using Django Permission classes is
+    supported only for DRF views. DRF does provide a `Python decorator`_
+    to add DRF support to function-based views.
+    
+  * Only DRF enhanced views support JWT based authentication in our
+    system. They do so via the DRF-based JwtAuthentication_ class.
+    So we can **safely assume** that all JWT-supporting API endpoints
+    can be protected via DRF's Permission class.
      
 .. _custom Permission: http://www.django-rest-framework.org/api-guide/permissions/#custom-permissions
 .. _TokenHasScope: https://github.com/evonove/django-oauth-toolkit/blob/50e4df7d97af90439d27a73c5923f2c06a4961f2/oauth2_provider/contrib/rest_framework/permissions.py#L13
 .. _`REST_FRAMEWORK's DEFAULT_PERMISSION_CLASSES`: http://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy
+.. _function-based Django views: https://docs.djangoproject.com/en/2.0/topics/http/views/
+.. _Django Rest Framework (DRF): http://www.django-rest-framework.org/
+.. _Python decorator: http://www.django-rest-framework.org/tutorial/2-requests-and-responses/#wrapping-api-views
+.. _JwtAuthentication: https://github.com/edx/edx-drf-extensions/blob/1db9f5e3e5130a1e0f43af2035489b3ed916d245/edx_rest_framework_extensions/authentication.py#L153
 
 Consequences
 ------------
