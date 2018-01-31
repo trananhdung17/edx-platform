@@ -10,27 +10,29 @@ Context
 -------
 
 Although external edX clients, as Restricted Applications, can use edX
-as an Identity Provider, they cannot make any API calls on behalf of 
-users. In addition, server-to-server calls via the Client Credentials
-grant type is also limiting as our API endpoints do not allow organizations
-to access data for their own users. The lack of OAuth2 Scopes enforcement
-by our API endpoints prevents us from lifting these constraints.
+as an Identity Provider, they cannot successfully make any API calls on
+behalf of users. As explained in 0005-restricted-application-for-SSO_,
+edX prevents successful API calls since our API endpoints do not enforce
+OAuth scopes.
 
 For additional background information on the current implementation,
 see the README_.
 
+.. _0005-restricted-application-for-SSO: 0005-restricted-application-for-SSO.rst
 .. _README: ../README.rst
 
 Decisions
 ---------
 
-Add support for enforcing OAuth2 scopes by making the following advancements simultaneously.
+Add support for enforcing OAuth2 scopes by making the following advancements
+simultaneously.
 
 1. Define and configure new OAuth2 Scopes for accessing API resources
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * For now, we will start with an initial set of OAuth2 Scopes based on
-  immediate API needs.
+  immediate API needs. See 0007-include-organizations-in-tokens_ for
+  initial examples.
 
 * OAuth2 clients should be frugal about limiting the scopes they request
   in order to:
@@ -39,7 +41,13 @@ Add support for enforcing OAuth2 scopes by making the following advancements sim
   * keep the UX of the user approval form reasonable
   * follow principle of least privilege
 
-2. Restricted Applications receive *unexpired* JWTs, signed with a *new key*
+2. Add a version number in the OAuth2 token payload
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As a preemptive step, set a version number field (= 1) in the OAuth2 token
+payload.
+
+3. Restricted Applications receive *unexpired* JWTs, signed with a *new key*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * We will no longer return expired *JWTs as access tokens* to Restricted
@@ -92,7 +100,7 @@ Add support for enforcing OAuth2 scopes by making the following advancements sim
 .. _oauth_dispatch.views.AccessTokenView.dispatch: https://github.com/edx/edx-platform/blob/d21a09828072504bc97a2e05883c1241e3a35da9/openedx/core/djangoapps/oauth_dispatch/views.py#L100
 .. _oauth_dispatch.validators: https://github.com/edx/edx-platform/blob/master/openedx/core/djangoapps/oauth_dispatch/dot_overrides/validators.py
 
-3. Associate Available Scopes with Applications
+4. Associate Available Scopes with Applications
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 (**Note to MS:** This seems to be the DOT recommended way of adding 
@@ -114,47 +122,12 @@ available scopes support.)
 .. _get_available_scopes: https://github.com/evonove/django-oauth-toolkit/blob/2129f32f55cda950ef220c130dc7de55bea29caf/oauth2_provider/scopes.py#L17
 .. _SettingsScopes: https://github.com/evonove/django-oauth-toolkit/blob/2129f32f55cda950ef220c130dc7de55bea29caf/oauth2_provider/scopes.py#L39
 
-4. Associate Available Organizations with Applications
+5. Associate Available Organizations with Applications
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-(**Note to MS:**  Some details here are different from the implementation
-in your PR. See further explanations in the Consequences section below.)
+* See 0007-include-organizations-in-tokens_ for decisions on this.
 
-* In order to allow Applications to access data for their own
-  organization without inadvertently or maliciously gaining access
-  to data for other organizations, Applications need to be
-  linked to their own organization. To support this, open edX 
-  operators can configure Application-specific "available organizations",
-  which are akin to Application-specific "available scopes".
-
-* Introduce a new data model that associates available organizations
-  with DOT Applications.
-
-* The new data model will have a Foreign Key to the Organization_ table.
-  It will essentially be a many-to-many relationship between Organizations
-  and DOT Applications.
-
-* The organization associated with the Application will be included
-  in the JWT tokens requested by the Application.
-
-  * JwtBuilder_'s *build_token* functionality will be extended to include
-    the organization value in the token's payload. This payload is
-    cryptographically signed and so binds and limits the scopes in the
-    token to the organization.
-
-  * Since the organization value is in the token, any relying parties
-    that receive the token (including microservices) will be able to
-    enforce the scopes as limited to the organization.
-
-* **Question:** Should we distinguish between user_org and course_org?  
-  The former is the Enterprise relationship while the latter is the
-  content provider relationship.  In the future, we will also have
-  sponsorship relationship. This depends on whether large organizations
-  will want to compartmentalize their Applications.
-
-.. _Organization: https://github.com/edx/edx-organizations/blob/fa137881be9b7d330062bc32655a00c68635cfed/organizations/models.py#L14
-
-5. Introduce a new Permission class to enforce scopes
+6. Introduce a new Permission class to enforce scopes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * The new `custom Permission`_ class will extend DOT's TokenHasScope_
@@ -230,14 +203,10 @@ Consequences
     time of returning unexpired tokens and at the time of validating
     requests), minimizes the complexity of the code.
 
-* By associating Scopes and Organizations with DOT Applications and not
-  Restricted Applications, we can eventually eliminate Restricted
-  Applications altogether. Besides, they were introduced as a temporary
-  concept until Scopes were fully rolled out.
-
-* By including the organization value in the token, any relying parties
-  that receive the token (including microservices) will be able to
-  enforce the scopes as limited to the organization.
+* By associating Scopes with DOT Applications and not Restricted 
+  Applications, we can eventually eliminate Restricted Applications
+  altogether. Besides, they were introduced as a temporary concept
+  until Scopes were fully rolled out.
 
 * Microservices will continue to have limited scope support. We are
   consciously deciding to not address them at this time. When we do,
@@ -245,4 +214,4 @@ Consequences
   logic and code.
 
 .. _feature toggle (switch): https://openedx.atlassian.net/wiki/spaces/OpenDev/pages/40862688/Feature+Flags+and+Settings+on+edx-platform#FeatureFlagsandSettingsonedx-platform-Case1:Decouplingreleasefromdeployment
-.. _JwtBuilder: https://github.com/edx/edx-platform/blob/d3d64970c36f36a96d684571ec5b48ed645618d8/openedx/core/lib/token_utils.py#L15
+.. _0007-include-organizations-in-tokens: 0007-include-organizations-in-tokens.rst
