@@ -115,4 +115,5 @@ def log_python_warnings():
     each test case.
     """
     warnings.simplefilter('default')
+    warnings.simplefilter('ignore', 'xblock.exceptions.FieldDataDeprecationWarning')
     logging.captureWarnings(True)
