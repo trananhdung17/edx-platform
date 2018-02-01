@@ -484,6 +484,8 @@
 
             it('renders and removes search alerts', function() {
                 var bar, foo;
+                testAlertMessages(['There are no posts in this topic yet.']);
+                this.view.clearSearchAlerts();
                 testAlertMessages([]);
                 foo = this.view.addSearchAlert('foo');
                 testAlertMessages(['foo']);
@@ -497,6 +499,8 @@
 
             it('renders search alert with custom class', function() {
                 var messages;
+                testAlertMessages(['There are no posts in this topic yet.']);
+                this.view.clearSearchAlerts();
                 testAlertMessages([]);
 
                 this.view.addSearchAlert('foo', 'custom-class');
@@ -517,6 +521,7 @@
 
 
             it('clears all search alerts', function() {
+                this.view.clearSearchAlerts();
                 this.view.addSearchAlert('foo');
                 this.view.addSearchAlert('bar');
                 this.view.addSearchAlert('baz');
