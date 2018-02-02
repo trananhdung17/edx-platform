@@ -117,6 +117,8 @@ CELERYBEAT_SCHEDULE = {}  # For scheduling tasks, entries can be added to this d
 with open(CONFIG_ROOT / CONFIG_PREFIX + "env.json") as env_file:
     ENV_TOKENS = json.load(env_file)
 
+DEBUG_TOOLBAR = ENV_TOKENS.get('DEBUG_TOOLBAR', False)
+
 # STATIC_ROOT specifies the directory where static files are
 # collected
 STATIC_ROOT_BASE = ENV_TOKENS.get('STATIC_ROOT_BASE', None)

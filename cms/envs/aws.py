@@ -94,6 +94,7 @@ CELERY_ROUTES = "{}celery.Router".format(QUEUE_VARIANT)
 with open(CONFIG_ROOT / CONFIG_PREFIX + "env.json") as env_file:
     ENV_TOKENS = json.load(env_file)
 
+DEBUG_TOOLBAR = ENV_TOKENS.get('DEBUG_TOOLBAR', False)
 # Do NOT calculate this dynamically at startup with git because it's *slow*.
 EDX_PLATFORM_REVISION = ENV_TOKENS.get('EDX_PLATFORM_REVISION', EDX_PLATFORM_REVISION)
 
