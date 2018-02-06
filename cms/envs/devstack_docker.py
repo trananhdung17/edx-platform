@@ -11,6 +11,9 @@ LOGGING['loggers']['tracking']['handlers'] = ['console']
 
 LMS_BASE = 'edx.devstack.lms:18000'
 CMS_BASE = 'edx.devstack.studio:18010'
+
+LMS_BASE = ENV_TOKENS.get('LMS_BASE', LMS_BASE)
+CMS_BASE = ENV_TOKENS.get('CMS_BASE', CMS_BASE)
 LMS_ROOT_URL = 'http://{}'.format(LMS_BASE)
 
 FEATURES.update({
